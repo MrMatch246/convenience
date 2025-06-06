@@ -1,0 +1,5 @@
+alias zshconfig="nano ~/.zshrc"
+alias gkalinew="docker run -it --net=host -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix -v ~/Documents/Docker-Shared:/root/shared --name guikali kalilinux/kali-rolling bash -c 'apt update && apt -y install curl git;git clone https://github.com/MrMatch246/convenience.git ; cd convenience/docker_setup; chmod +x gui_kali_docker.sh; ./gui_kali_docker.sh;exec zsh'"
+alias gkali="docker start guikali;docker exec -it guikali zsh;nohup docker stop guikali > /dev/null 2>&1 & disown"
+alias kali="docker start kali;docker exec -it kali zsh;nohup docker stop kali > /dev/null 2>&1 & disown"
+alias kalinew="docker run --name kali --tty --interactive kalilinux/kali-rolling"
