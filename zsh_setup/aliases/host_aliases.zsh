@@ -34,8 +34,8 @@ guiDockerInteract() {
 }
 
 guiKaliInteract() {
-  guiDockerAttach guikali
+  guiDockerInteract guikali
 }
 
-alias gkali="guiKaliAttach guikali"
+alias gkali="guiKaliInteract guikali"
 alias gkalinew="guikalinew guikali"
