@@ -1,6 +1,6 @@
 # convenience
 
-# 🐚 Kali Docker Pentesting Environment Setup
+# 🛡️ Kali Docker Pentesting Environment Setup
 
 This repository provides a modular and extensible setup for building, running, and managing **Custom Kali Docker containers**, configuring **ZSH environments**, and orchestrating **project-based workflows** for penetration testing.
 
