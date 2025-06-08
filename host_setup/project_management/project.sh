@@ -141,9 +141,9 @@ enter_project() {
   fi
 
   # Start and enter the new container
+  xhostUp
   docker start "$container" > /dev/null
   echo "$container" > "$CURRENT_FILE"
-  xhostUp
   docker exec -it "$container" zsh
 }
 
