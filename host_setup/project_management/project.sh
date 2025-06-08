@@ -1,7 +1,7 @@
 #!/bin/bash
 ENGAGEMENTS_DIR="$HOME/Documents/Engagements"
 RUNNING_ENGAGEMENTS_DIR="$ENGAGEMENTS_DIR/Running"
-ARCHIVED_ENGAGEMENTS_DIR="$RUNNING_ENGAGEMENTS_DIR/Archive"
+ARCHIVED_ENGAGEMENTS_DIR="$ENGAGEMENTS_DIR/Archive"
 CURRENT_FILE="$RUNNING_ENGAGEMENTS_DIR/.current_project"
 XSOCK="/tmp/.X11-unix"
 XAUTH="/tmp/.docker.xauth"
@@ -109,13 +109,40 @@ switch_project() {
 
 enter_project() {
   local container="$1"
+
+  # Check for current project
+  if [ -f "$CURRENT_FILE" ]; then
+    local current_container
+    current_container=$(cat "$CURRENT_FILE")
+  else
+    current_container=""
+  fi
+
+  # If no container was passed, default to current
   if [ -z "$container" ]; then
-    if [ ! -f "$CURRENT_FILE" ]; then
-      echo -e  "$WARN No current project. Use: project switch <name>"
+    if [ -z "$current_container" ]; then
+      echo -e "$WARN No current project. Use: project switch <name>"
       exit 1
     fi
-    container=$(cat "$CURRENT_FILE")
+    container="$current_container"
   fi
+
+  # If switching to a different container, prompt the user
+  if [ -n "$current_container" ] && [ "$current_container" != "$container" ]; then
+    echo -e "$WARN You are currently in project '$current_container'."
+    echo -e "[?] Entering '$container' will stop '$current_container'. Are you sure? (y/N)"
+    read -r confirm
+    if [[ "$confirm" != "y" && "$confirm" != "Y" ]]; then
+      echo -e "$INFO Aborted switching to $container."
+      exit 0
+    fi
+    nohup docker stop "$current_container" > /dev/null 2>&1
+    echo -e "$CHECKMARK Stopped project $current_container"
+  fi
+
+  # Start and enter the new container
+  docker start "$container" > /dev/null
+  echo "$container" > "$CURRENT_FILE"
   xhostUp
   docker exec -it "$container" zsh
 }
@@ -136,12 +163,25 @@ exit_project() {
 archive_project() {
   local container="$1"
   local folder="$RUNNING_ENGAGEMENTS_DIR/$container"
-  local archive="$ARCHIVED_ENGAGEMENTS_DIR/${container}_archived_$(date +%d-%m-%Y).tar.gz"
+  local archive_dir="$ARCHIVED_ENGAGEMENTS_DIR"
+  local archive="$archive_dir/${container}_archived_$(date +%d-%m-%Y).tar.gz"
+
+  # Ensure archive directory exists
+  mkdir -p "$archive_dir"
+
+  # Stop the container
   docker stop "$container" >/dev/null
-  tar -czf "$archive" -C "$RUNNING_ENGAGEMENTS_DIR" "$container"
-  echo -e  "$CHECKMARK Archived project container to $archive"
-  touch "$folder/.archived"
+
+  # Archive the folder
+  if tar -czf "$archive" -C "$RUNNING_ENGAGEMENTS_DIR" "$container"; then
+    echo -e "$CHECKMARK Archived project container to $archive"
+    touch "$folder/.archived"
+  else
+    echo -e "$ERROR Failed to archive project container."
+    return 1
+  fi
 }
+
 
 remove_project() {
   local container="$1"
