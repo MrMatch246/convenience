@@ -26,13 +26,6 @@ RUN sed -i 's/ZSH_THEME="robbyrussell"/ZSH_THEME="agnoster"/g' /root/.zshrc && \
     git clone https://github.com/zsh-users/zsh-syntax-highlighting.git /root/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting && \
     sed -i 's/plugins=(git)/plugins=(git zsh-autosuggestions zsh-syntax-highlighting)/g' /root/.zshrc
 
-
-# Clone config repo
-RUN git clone https://github.com/MrMatch246/convenience.git /root/convenience
-# Add custom aliases
-RUN cp /root/convenience/zsh_setup/aliases/docker_aliases.zsh /root/.oh-my-zsh/custom/docker_aliases.zsh
-
-
 # Enable raw socket/network bind capability for nmap
 RUN setcap cap_net_raw,cap_net_bind_service+eip /usr/lib/nmap/nmap || true
 
@@ -58,6 +51,10 @@ RUN curl -L -o /opt/jython-standalone-${JYTHON_VERSION}.jar \
 RUN apt -y purge llvm-18 && \
     apt clean
 
+# Clone config repo
+RUN git clone https://github.com/MrMatch246/convenience.git /root/convenience
+# Add custom aliases
+RUN cp /root/convenience/zsh_setup/aliases/docker_aliases.zsh /root/.oh-my-zsh/custom/docker_aliases.zsh
 
 # Set default shell
 SHELL ["/bin/zsh", "-c"]

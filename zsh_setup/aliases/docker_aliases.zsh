@@ -2,4 +2,4 @@ alias upali="git -C /root/convenience pull;cp /root/convenience/zsh_setup/aliase
 alias zenmap="nohup zenmap > /dev/null 2>&1 & disown"
 alias burp="nohup /opt/BurpSuitePro/BurpSuitePro --user-config-file ~/tmp/default_burp_user_settings.json > /dev/null 2>&1 & disown"
 alias msf="service postgresql start;msfdb run"
-alias zap="nohup /zap.sh > /dev/null 2>&1 & disown"
+alias zap="nohup zap.sh > /dev/null 2>&1 & disown"
