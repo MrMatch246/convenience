@@ -42,6 +42,10 @@ RUN chmod +x /root/tmp/burpsuite_pro_linux.sh && \
     /root/tmp/burpsuite_pro_linux.sh -q && \
     rm -rf /root/.cache
 
+RUN chmod +x /root/tmp/ZAP_unix.sh && \
+    /root/tmp/ZAP_unix.sh -q && \
+    rm -rf /root/.cache
+
 
 # Set Jython version
 ENV JYTHON_VERSION=2.7.4
