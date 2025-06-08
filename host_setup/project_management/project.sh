@@ -35,11 +35,11 @@ xhostDown() {
 usage() {
   echo -e  "Usage:"
   echo -e  "  project create <name>"
-  echo -e  "  project switch <name>"
   echo -e  "  project enter [name]"
+  echo -e  "  project switch <name>"
   echo -e  "  project archive <name>"
   echo -e  "  project remove <name>"
-  echo -e  "  project export <name>"
+  #echo -e  "  project export <name>"
   echo -e  "  project exit"
 }
 
@@ -221,10 +221,11 @@ remove_project() {
 }
 
 export_project() {
-  local container="$1"
-  local export_file="$RUNNING_ENGAGEMENTS_DIR/${container}_exported_$(date +%d-%m-%Y).tar"
-  docker export "$container" -o "$export_file"
-  echo -e  "$CHECKMARK Exported project container to $export_file"
+  #local container="$1"
+  #local export_file="$RUNNING_ENGAGEMENTS_DIR/${container}_exported_$(date +%d-%m-%Y).tar"
+  #docker export "$container" -o "$export_file"
+  #echo -e  "$CHECKMARK Exported project container to $export_file"
+  echo -e  "$WARN Export functionality is not implemented yet."
 }
 
 ### Main
@@ -233,11 +234,11 @@ name="$2"
 
 case "$cmd" in
   create)  create_project "$name" ;;
-  switch)  switch_project "$name" ;;
   enter)   enter_project "$name" ;;
+  switch)  switch_project "$name" ;;
   archive) archive_project "$name" ;;
   remove)  remove_project "$name" ;;
-  export)  export_project "$name" ;;
+  #export)  export_project "$name" ;;
   exit)    exit_project ;;
   *)       usage ;;
 esac
