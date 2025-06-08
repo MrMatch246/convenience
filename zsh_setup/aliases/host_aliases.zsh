@@ -5,17 +5,16 @@ XAUTH="/tmp/.docker.xauth"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 xhostUp() {
-  xhost +SI:localuser:root
-  touch "$XAUTH"
-  xauth nlist "$DISPLAY" | sed -e 's/^..../ffff/' | xauth -f "$XAUTH" nmerge -
-  chmod 600 "$XAUTH"
+  nohup xhost +SI:localuser:root > /dev/null 2>&1
+  if [ ! -f "$XAUTH" ]; then
+    touch "$XAUTH"
+    xauth nlist "$DISPLAY" | sed -e 's/^..../ffff/' | xauth -f "$XAUTH" nmerge -
+    chmod 600 "$XAUTH"
+  fi
 }
 
 xhostDown() {
-  xhost -SI:localuser:root
-  if [ -f "$XAUTH" ]; then
-      rm -f "$XAUTH"
-  fi
+  nohup xhost -SI:localuser:root > /dev/null 2>&1
 }
 
 guidocker() {
@@ -52,7 +51,7 @@ guiDockerInteract() {
   xhostUp
   docker start -ai $1
   xhostDown
-  nohup docker stop $1 > /dev/null 2>&1 & disown
+  nohup docker stop $1 > /dev/null 2>&1
 }
 
 guikali() {
