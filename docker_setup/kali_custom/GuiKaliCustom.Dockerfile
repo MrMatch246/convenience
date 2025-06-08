@@ -50,7 +50,9 @@ ENV JYTHON_VERSION=2.7.4
 RUN curl -L -o /opt/jython-standalone-${JYTHON_VERSION}.jar \
     https://repo1.maven.org/maven2/org/python/jython-standalone/${JYTHON_VERSION}/jython-standalone.jar
 
-
+# Fix for Metasploit Framework
+RUN apt -y purge llvm-18 && \
+    apt clean
 
 
 # Set default shell
