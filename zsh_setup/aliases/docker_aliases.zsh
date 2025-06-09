@@ -6,15 +6,15 @@ alias zap="nohup zap.sh > /dev/null 2>&1 & disown"
 alias cleanup='\
   echo "[*] Cleaning APT..." && \
   apt-get clean && \
-  echo "y\n" | rm -rf /var/lib/apt/lists/* && \
+  rm -rf /var/lib/apt/lists/* && \
   echo "[*] Removing temp files..." && \
-  echo "y\n" | rm -rf /tmp/* /var/tmp/* && \
+  rm -rf /tmp/* /var/tmp/* && \
   echo "[*] Truncating logs..." && \
   find /var/log -type f -exec truncate -s 0 {} \; && \
   echo "[*] Removing shell cache & history..." && \
   unset HISTFILE && \
   rm -f ~/.bash_history ~/.zsh_history && \
-  echo "y\n" | history -c || true && \
+  history -c || true && \
   echo "[*] Removing Zsh comp dump and caches..." && \
   rm -rf ~/.zcompdump* ~/.cache ~/.local ~/.BurpSuite && \
   echo "[✓] Docker cleanup complete."'
