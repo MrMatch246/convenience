@@ -9,6 +9,7 @@ RUN apt update && \
       fonts-powerline \
       git \
       curl \
+      nano \
       ca-certificates && \
     apt clean
 
@@ -35,6 +36,7 @@ RUN chmod +x /root/tmp/burpsuite_pro_linux.sh && \
     /root/tmp/burpsuite_pro_linux.sh -q && \
     rm -rf /root/.cache
 
+COPY ./docker_setup/kali_custom/tmp/ /root/tmp/
 RUN chmod +x /root/tmp/ZAP_unix.sh && \
     /root/tmp/ZAP_unix.sh -q && \
     rm -rf /root/.cache
