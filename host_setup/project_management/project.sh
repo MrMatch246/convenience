@@ -45,7 +45,7 @@ usage() {
 
 create_project() {
   local name="$1"
-  local container="${name}_$(date +%d-%m-%Y)_Pentest"
+  local container="${name}_$(date +%d-%m-%Y)"
   local folder="$RUNNING_ENGAGEMENTS_DIR/$container"
 
   mkdir -p "$folder"
