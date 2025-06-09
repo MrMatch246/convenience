@@ -3,18 +3,18 @@ alias zenmap="nohup zenmap > /dev/null 2>&1 & disown"
 alias burp="nohup /opt/BurpSuitePro/BurpSuitePro --user-config-file=/root/tmp/default_burp_user_settings.json > /dev/null 2>&1 & disown"
 alias msf="service postgresql start;msfdb run"
 alias zap="nohup zap.sh > /dev/null 2>&1 & disown"
-alias docker_cleanup='\
+alias cleanup='\
   echo "[*] Cleaning APT..." && \
   apt-get clean && \
-  rm -rf /var/lib/apt/lists/* && \
+  echo "y\n" | rm -rf /var/lib/apt/lists/* && \
   echo "[*] Removing temp files..." && \
-  rm -rf /tmp/* /var/tmp/* && \
+  echo "y\n" | rm -rf /tmp/* /var/tmp/* && \
   echo "[*] Truncating logs..." && \
   find /var/log -type f -exec truncate -s 0 {} \; && \
   echo "[*] Removing shell cache & history..." && \
   unset HISTFILE && \
   rm -f ~/.bash_history ~/.zsh_history && \
-  history -c || true && \
+  echo "y\n" | history -c || true && \
   echo "[*] Removing Zsh comp dump and caches..." && \
   rm -rf ~/.zcompdump* ~/.cache ~/.local ~/.BurpSuite && \
   echo "[✓] Docker cleanup complete."'
