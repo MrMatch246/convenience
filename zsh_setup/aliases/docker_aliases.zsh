@@ -18,4 +18,5 @@ alias cleanup='\
   echo "[*] Removing Zsh comp dump and caches..." && \
   rm -rf ~/.zcompdump* ~/.cache ~/.local ~/.BurpSuite && \
   echo "[✓] Docker cleanup complete."'
-alias a='arsenal'
+alias arse='arsenal'
+alias argu='source /root/argus/env/bin/activate && python3 /root/argus/argus.py'
