@@ -87,7 +87,7 @@ RUN pipx install nettacker --python python3
 RUN rm /root/.pyenv/version && \
     rm -rf /root/.cache \
 
-RUN export PATH="$PATH:/root/.local/bin"
+ENV PATH="/root/.local/bin:$PATH"
 
 
 WORKDIR /
