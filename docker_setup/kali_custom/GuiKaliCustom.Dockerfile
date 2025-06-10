@@ -10,6 +10,7 @@ RUN apt update && \
       git \
       curl \
       nano \
+      pyenv \
       ca-certificates && \
     apt clean
 
@@ -59,6 +60,7 @@ RUN apt -y purge llvm-18, llvm-19 && \
     apt autoremove && \
     apt clean
 
+# Install Argus
 WORKDIR /root/
 RUN git clone https://github.com/jasonxtn/argus.git
 WORKDIR /root/argus
@@ -71,6 +73,7 @@ RUN python3 -m venv env && \
 RUN git clone https://github.com/MrMatch246/convenience.git /root/convenience
 # Add custom aliases
 RUN cp /root/convenience/zsh_setup/aliases/docker_aliases.zsh /root/.oh-my-zsh/custom/docker_aliases.zsh
+RUN echo "source /root/convenience/zsh_setup/zsh_config/docker_zshrc" >> /root/.zshrc
 
 
 

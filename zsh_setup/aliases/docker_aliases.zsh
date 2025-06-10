@@ -20,6 +20,3 @@ alias cleanup='\
   echo "[✓] Docker cleanup complete."'
 alias arse='arsenal'
 alias argu='source /root/argus/env/bin/activate && python3 /root/argus/argus.py'
-export PYENV_ROOT="$HOME/.pyenv"
-[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init - zsh)"
