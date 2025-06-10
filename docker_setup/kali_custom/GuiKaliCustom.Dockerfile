@@ -75,7 +75,22 @@ RUN git clone https://github.com/MrMatch246/convenience.git /root/convenience
 RUN cp /root/convenience/zsh_setup/aliases/docker_aliases.zsh /root/.oh-my-zsh/custom/docker_aliases.zsh
 RUN echo "source /root/convenience/zsh_setup/zsh_config/docker_zshrc" >> /root/.zshrc
 
+#Install Python3.12
+ENV PYENV_ROOT="/root/.pyenv"
 
+ENV PATH="$PYENV_ROOT/bin:$PYENV_ROOT/shims:$PATH"
+
+RUN pyenv install 3.12.9 && pyenv global 3.12.9
+
+RUN pipx install nettacker --python python3
+
+RUN rm /root/.pyenv/version && \
+    rm -rf /root/.cache \
+
+RUN export PATH="$PATH:/root/.local/bin"
+
+
+WORKDIR /
 
 # Set default shell
 SHELL ["/bin/zsh", "-c"]

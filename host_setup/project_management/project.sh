@@ -136,7 +136,7 @@ enter_project() {
       echo -e "$INFO Aborted switching to $container."
       exit 0
     fi
-    nohup docker stop "$current_container" > /dev/null 2>&1
+    nohup docker stop "$current_container" > /dev/null 2>&1 & disown
     echo -e "$CHECKMARK Stopped project $current_container"
   fi
 
@@ -186,7 +186,7 @@ archive_project() {
 remove_project() {
   local container="$1"
   if [ -z "$container" ]; then
-    echo -e  "$WARN Please specify a project name to remove."
+    echo -e "$WARN Please specify a project name to remove."
     exit 1
   fi
 
@@ -195,18 +195,26 @@ remove_project() {
   fi
 
   if ! docker ps -a --format '{{.Names}}' | grep -q "^$container$"; then
-    echo -e  "$WARN Project $container does not exist. Maybe you already removed it?"
+    echo -e "$WARN Project $container does not exist. Maybe you already removed it?"
     exit 1
   fi
 
   local folder="$RUNNING_ENGAGEMENTS_DIR/$container"
   local archived_flag="$folder/.archived"
 
+  # Check if folder exists and is empty
+  if [ -d "$folder" ] && [ -z "$(ls -A "$folder")" ]; then
+    docker rm -f "$container" > /dev/null
+    rm -rf "$folder"
+    echo -e "$CHECKMARK Removed empty project $container"
+    return
+  fi
+
   if [ ! -f "$archived_flag" ]; then
-    echo -e  "$WARN This project has not been archived. Are you sure you want to permanently remove it? (y/N)"
+    echo -e "$WARN This project has not been archived. Are you sure you want to permanently remove it? (y/N)"
     read -r confirm
     if [[ "$confirm" != "y" && "$confirm" != "Y" ]]; then
-      echo -e  "$WARN Aborted removal of $container."
+      echo -e "$WARN Aborted removal of $container."
       exit 0
     fi
   fi
@@ -219,6 +227,7 @@ remove_project() {
 
   echo -e "$CHECKMARK Removed project $container"
 }
+
 
 export_project() {
   #local container="$1"
