@@ -34,13 +34,14 @@ RUN setcap cap_net_raw,cap_net_bind_service+eip /usr/lib/nmap/nmap || true
 COPY ./docker_setup/kali_custom/tmp/ /root/tmp/
 RUN chmod +x /root/tmp/burpsuite_pro_linux.sh && \
     /root/tmp/burpsuite_pro_linux.sh -q && \
+    rm -f /root/tmp/burpsuite_pro_linux.sh && \
     rm -rf /root/.cache
 
 COPY ./docker_setup/kali_custom/tmp/ /root/tmp/
 RUN chmod +x /root/tmp/ZAP_unix.sh && \
     /root/tmp/ZAP_unix.sh -q && \
+    rm -f /root/tmp/ZAP_unix.sh && \
     rm -rf /root/.cache
-
 
 # Set Jython version
 ENV JYTHON_VERSION=2.7.4
@@ -49,14 +50,21 @@ ENV JYTHON_VERSION=2.7.4
 RUN curl -L -o /opt/jython-standalone-${JYTHON_VERSION}.jar \
     https://repo1.maven.org/maven2/org/python/jython-standalone/${JYTHON_VERSION}/jython-standalone.jar
 
+# Add Arsenal CLI
+RUN pipx ensurepath && \
+    pipx install arsenal-cli \
+
 # Fix for Metasploit Framework
-RUN apt -y purge llvm-18 && \
+RUN apt -y purge llvm-18, llvm-19 && \
+    apt autoremove && \
     apt clean
 
 # Clone config repo
 RUN git clone https://github.com/MrMatch246/convenience.git /root/convenience
 # Add custom aliases
 RUN cp /root/convenience/zsh_setup/aliases/docker_aliases.zsh /root/.oh-my-zsh/custom/docker_aliases.zsh
+
+
 
 # Set default shell
 SHELL ["/bin/zsh", "-c"]

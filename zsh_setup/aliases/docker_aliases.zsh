@@ -18,4 +18,4 @@ alias cleanup='\
   echo "[*] Removing Zsh comp dump and caches..." && \
   rm -rf ~/.zcompdump* ~/.cache ~/.local ~/.BurpSuite && \
   echo "[✓] Docker cleanup complete."'
-
+alias a='arsenal'
