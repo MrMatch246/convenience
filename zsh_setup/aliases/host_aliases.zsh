@@ -60,7 +60,7 @@ guikali() {
 
 fnano() {
     local file
-    file=$(fzf --preview "cat {}") || return
+    file=$(fzf --preview "batcat --paging=never --color=always --style=plain {}") || return
     nano "$file"
 }
 
