@@ -167,7 +167,7 @@ archive_project() {
   local archive="$archive_dir/${container}_archived_$(date +%d-%m-%Y).tar.gz"
 
   # Ensure archive directory exists
-  mkdir -p "$archive_dir"
+  mkdir -p "$archive_dir"/{Admin,Deliverables,Evidence/{Findings,Scans/{Vuln,Service,Web,ADEnum},Notes,OSINT,Logs,Misc},Retest}
 
   # Stop the container
   docker stop "$container" >/dev/null
