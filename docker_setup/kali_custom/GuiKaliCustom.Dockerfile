@@ -11,12 +11,8 @@ RUN apt update && \
       curl \
       nano \
       pyenv \
+      lnav \
       ca-certificates && \
-    apt clean
-
-RUN apt update && \
-    DEBIAN_FRONTEND=noninteractive apt install -y \
-      lnav && \
     apt clean
 
 # Install Oh My Zsh (unattended)
@@ -53,7 +49,10 @@ RUN curl -L -o /opt/jython-standalone-${JYTHON_VERSION}.jar \
 
 # Add Arsenal CLI
 RUN pipx ensurepath && \
-    pipx install arsenal-cli \
+    pipx install arsenal-cli && \
+    pipx install tldr
+
+
 
 # Fix for Metasploit Framework
 RUN apt -y purge llvm-18, llvm-19 && \

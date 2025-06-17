@@ -58,6 +58,12 @@ guikali() {
   guiDockerInteract $1
 }
 
+fnano() {
+    local file
+    file=$(fzf --preview "cat {}") || return
+    nano "$file"
+}
+
 alias gkali="guikali Kali-Gui"
 alias gkalinew="guikalinew Kali-Gui"
 alias upali="cp ~/REPOS/convenience/zsh_setup/aliases/host_aliases.zsh ~/.oh-my-zsh/custom/host_aliases.zsh;source ~/.zshrc"
