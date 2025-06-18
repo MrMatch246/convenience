@@ -44,7 +44,7 @@ RUN chmod +x /root/tmp/ZAP_unix.sh && \
 ENV JYTHON_VERSION=2.7.4
 
 # Download Jython standalone jar
-RUN curl -L -o /opt/jython-standalone-${JYTHON_VERSION}.jar \
+RUN curl -L -o /opt/jython-standalone.jar \
     https://repo1.maven.org/maven2/org/python/jython-standalone/${JYTHON_VERSION}/jython-standalone.jar
 
 # Add Arsenal CLI

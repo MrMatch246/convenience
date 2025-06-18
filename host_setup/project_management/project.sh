@@ -48,7 +48,7 @@ create_project() {
   local container="${name}_$(date +%d-%m-%Y)"
   local folder="$RUNNING_ENGAGEMENTS_DIR/$container"
 
-  mkdir -p "$folder"
+  mkdir -p "$folder"/{Admin,Deliverables,Evidence/{Findings,Scans/{Vuln,Service,Web,ADEnum},Notes,OSINT,Logs,Misc},Retest}
   xhostUp
   docker run -dit \
       --net=host \
@@ -167,11 +167,11 @@ archive_project() {
   local archive="$archive_dir/${container}_archived_$(date +%d-%m-%Y).tar.gz"
 
   # Ensure archive directory exists
-  mkdir -p "$archive_dir"/{Admin,Deliverables,Evidence/{Findings,Scans/{Vuln,Service,Web,ADEnum},Notes,OSINT,Logs,Misc},Retest}
+  mkdir -p "$archive_dir"
 
   # Stop the container
   docker stop "$container" >/dev/null
-
+  sudo chown -R "$USER" "$folder"
   # Archive the folder
   if tar -czf "$archive" -C "$RUNNING_ENGAGEMENTS_DIR" "$container"; then
     echo -e "$CHECKMARK Archived project container to $archive"
@@ -205,7 +205,7 @@ remove_project() {
   # Check if folder exists and is empty
   if [ -d "$folder" ] && [ -z "$(ls -A "$folder")" ]; then
     docker rm -f "$container" > /dev/null
-    rm -rf "$folder"
+    sudo rm -rf "$folder"
     echo -e "$CHECKMARK Removed empty project $container"
     return
   fi
@@ -222,7 +222,7 @@ remove_project() {
   docker rm -f "$container" > /dev/null
 
   if [ -d "$folder" ]; then
-    rm -rf "$folder"
+    sudo rm -rf "$folder"
   fi
 
   echo -e "$CHECKMARK Removed project $container"
