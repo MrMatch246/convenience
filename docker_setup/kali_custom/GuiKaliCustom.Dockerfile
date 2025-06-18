@@ -45,7 +45,12 @@ ENV JYTHON_VERSION=2.7.4
 
 # Download Jython standalone jar
 RUN curl -L -o /opt/jython-standalone.jar \
-    https://repo1.maven.org/maven2/org/python/jython-standalone/${JYTHON_VERSION}/jython-standalone.jar
+    https://repo1.maven.org/maven2/org/python/jython-standalone/${JYTHON_VERSION}/jython-standalone-${JYTHON_VERSION}.jar
+
+# Fetch WSTG Checklist
+RUN curl -L -o /tmp/wstg_checklist.xlsx  \
+    https://github.com/OWASP/wstg/raw/refs/heads/master/checklists/checklist.xlsx
+
 
 # Add Arsenal CLI
 RUN pipx ensurepath && \
