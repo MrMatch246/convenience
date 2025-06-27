@@ -6,6 +6,7 @@ CURRENT_FILE="$RUNNING_ENGAGEMENTS_DIR/.current_project"
 XSOCK="/tmp/.X11-unix"
 XAUTH="/tmp/.docker.xauth"
 PENTEST_IMAGE="engage-kali"
+FEATURES="/.features"
 
 GREEN="\033[0;32m"
 YELLOW="\033[0;33m"
@@ -48,7 +49,7 @@ create_project() {
   local container="${name}_$(date +%d-%m-%Y)"
   local folder="$RUNNING_ENGAGEMENTS_DIR/$container"
 
-  mkdir -p "$folder"/{Admin,Deliverables,Evidence/{Findings,Scans/{Vuln,Service,Web,ADEnum},Notes,OSINT,Logs,Misc},Retest}
+  mkdir -p "$folder"/{Admin,Deliverables,ProjectFiles,Evidence/{Findings,Scans/{Vuln,Service,Web,ADEnum},Notes,OSINT,Logs,Misc},Retest}
   xhostUp
   docker run -dit \
       --net=host \
@@ -72,7 +73,7 @@ create_project() {
       --hostname "$name" \
       "$PENTEST_IMAGE:latest" \
       tail -f /dev/null
-
+  touch "$folder$FEATURES"
   echo -e  "$ADD Created and started project $container"
   if [ ! -f "$CURRENT_FILE" ]; then
     echo -e  "$container" > "$CURRENT_FILE"
@@ -107,16 +108,20 @@ switch_project() {
   echo -e  "$CHECKMARK Switched to project $container"
 }
 
+get_current_container(){
+  if [ -f "$CURRENT_FILE" ]; then
+    cat "$CURRENT_FILE"
+  else
+    echo ""
+  fi
+}
+
+
 enter_project() {
   local container="$1"
 
   # Check for current project
-  if [ -f "$CURRENT_FILE" ]; then
-    local current_container
-    current_container=$(cat "$CURRENT_FILE")
-  else
-    current_container=""
-  fi
+  local current_container=$(get_current_container)
 
   # If no container was passed, default to current
   if [ -z "$container" ]; then
@@ -148,9 +153,9 @@ enter_project() {
 }
 
 exit_project() {
-  local container
-  if [ -f "$CURRENT_FILE" ]; then
-    container=$(cat "$CURRENT_FILE")
+  local container=$(get_current_container)
+
+  if [ -n "$container" ]; then
     docker stop "$container" >/dev/null
     echo -e  "$CHECKMARK Project $container exited."
     rm -f "$CURRENT_FILE"
@@ -229,6 +234,81 @@ remove_project() {
 }
 
 
+add_feature() {
+  local feature="$1"
+  local container=$(get_current_container)
+  if [ -z "$container" ]; then
+    echo -e "$WARN No current project. Use: project switch <name>"
+    exit 1
+  fi
+  case "$feature" in
+    "mobsf") add_mobsf ;;
+    *) echo -e "$WARN Unknown feature: $feature. Available features: mobsf" ;;
+  esac
+
+}
+
+enter_feature() {
+  local feature="$1"
+  local container=$(get_current_container)
+  if [ -z "$container" ]; then
+    echo -e "$WARN No current project. Use: project switch <name>"
+    exit 1
+  fi
+  case "$feature" in
+    "mobsf") enter_mobsf ;;
+    *) echo -e "$WARN Unknown feature: $feature. Available features: mobsf" ;;
+  esac
+
+}
+
+add_to_feature_file(){
+  if ! grep -Fxq "$1" "$2"; then
+    echo "$1" >> "$2"
+  fi
+}
+
+
+add_mobsf() {
+  local container=$(get_current_container)
+  if [ -z "$container" ]; then
+    echo -e "$WARN No current project. Use: project switch <name>"
+    exit 1
+  fi
+  local folder="$RUNNING_ENGAGEMENTS_DIR/$container"
+  local mobsf="$folder/Features/MobSF"
+  mkdir -p "$mobsf"
+  sudo chown -R 9901:9901 "$mobsf"
+  add_to_feature_file "mobsf" "$folder$FEATURES"
+  docker pull opensecurity/mobile-security-framework-mobsf:latest
+}
+
+enter_mobsf(){
+  local container=$(get_current_container)
+  if [ -z "$container" ]; then
+    echo -e "$WARN No current project. Use: project switch <name>"
+    exit 1
+  fi
+  local feature_folder="$RUNNING_ENGAGEMENTS_DIR/$container/Features/MobSF"
+  local features=$(cat "$RUNNING_ENGAGEMENTS_DIR/$container$FEATURES" 2>/dev/null || echo "")
+  local
+  if [[ ! "$features" =~ mobsf ]]; then
+    echo -e "$WARN MobSF feature is not enabled for this project. Use: project addfeat mobsf"
+    exit 1
+  fi
+
+  echo -e "$CHECKMARK Entering MobSF for project $container"
+  echo -e "$YELLOW You can now access the MobSF web interface by opening http://127.0.0.1:8000 in your browser. Use the default login credentials: mobsf/mobsf.$RESET"
+  docker run -it --rm --name mobsf \
+  -p 8000:8000 -v "$feature_folder":/home/mobsf/.MobSF opensecurity/mobile-security-framework-mobsf:latest
+
+}
+
+
+
+
+
+
 export_project() {
   #local container="$1"
   #local export_file="$RUNNING_ENGAGEMENTS_DIR/${container}_exported_$(date +%d-%m-%Y).tar"
@@ -247,6 +327,8 @@ case "$cmd" in
   switch)  switch_project "$name" ;;
   archive) archive_project "$name" ;;
   remove)  remove_project "$name" ;;
+  addfeat)  add_feature "$name" ;;
+  enterfeat) enter_feature "$name" ;;
   #export)  export_project "$name" ;;
   exit)    exit_project ;;
   *)       usage ;;
