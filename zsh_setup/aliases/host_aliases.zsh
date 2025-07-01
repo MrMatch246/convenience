@@ -66,5 +66,6 @@ fnano() {
 
 alias gkali="guikali Kali-Gui"
 alias gkalinew="guikalinew Kali-Gui"
-alias upali="cp ~/REPOS/convenience/zsh_setup/aliases/host_aliases.zsh ~/.oh-my-zsh/custom/host_aliases.zsh;source ~/.zshrc"
+alias upali="cp ~/REPOS/convenience/zsh_setup/aliases/host_aliases.zsh ~/.oh-my-zsh/custom/host_aliases.zsh;cp ~/REPOS/convenience/zsh_setup/aliases/project_aliases.zsh ~/.oh-my-zsh/custom/project_aliases.zsh;source ~/.zshrc"
+alias upprali="cp ~/REPOS/convenience/zsh_setup/aliases/project_aliases.zsh ~/.oh-my-zsh/custom/project_aliases.zsh;source ~/.zshrc"
 alias docklist="docker ps -a --format 'table {{.ID}}\t{{.Image}}\t{{.Names}}\t{{.Status}}'"
