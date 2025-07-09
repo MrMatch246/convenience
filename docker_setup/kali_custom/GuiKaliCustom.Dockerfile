@@ -20,10 +20,10 @@ RUN apt update && \
 RUN sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
 
 # Set up ZSH theme and plugins
-RUN sed -i 's/ZSH_THEME="robbyrussell"/ZSH_THEME="agnoster"/g' /root/.zshrc && \
-    git clone https://github.com/zsh-users/zsh-autosuggestions.git /root/.oh-my-zsh/custom/plugins/zsh-autosuggestions && \
-    git clone https://github.com/zsh-users/zsh-syntax-highlighting.git /root/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting && \
-    sed -i 's/plugins=(git)/plugins=(git zsh-autosuggestions zsh-syntax-highlighting)/g' /root/.zshrc
+RUN sed -i 's/ZSH_THEME="robbyrussell"/ZSH_THEME="agnoster"/g' /root/.zshrc
+RUN git clone https://github.com/zsh-users/zsh-autosuggestions.git /root/.oh-my-zsh/custom/plugins/zsh-autosuggestions
+RUN git clone https://github.com/zsh-users/zsh-syntax-highlighting.git /root/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
+RUN sed -i 's/plugins=(git)/plugins=(git zsh-autosuggestions zsh-syntax-highlighting)/g' /root/.zshrc
 
 # Enable raw socket/network bind capability for nmap
 RUN setcap cap_net_raw,cap_net_bind_service+eip /usr/lib/nmap/nmap || true
@@ -70,9 +70,7 @@ RUN pipx ensurepath && \
 
 
 # Fix for Metasploit Framework
-RUN apt -y purge llvm-18, llvm-19 && \
-    apt autoremove && \
-    apt clean
+RUN apt -y purge llvm-19
 
 # Install Argus
 WORKDIR /root/
@@ -84,7 +82,7 @@ RUN python3 -m venv env && \
     pip install -r requirements.txt
 
 # Setup Proxychains config
-RUN sed -i 's/^socks4[ \t]*127\.0\.0\.1[ \t]*9050$/socks5 127.0.0.1 9050/' /etc/proxychains.conf
+RUN sed -i 's/^socks4[ \t]*127\.0\.0\.1[ \t]*9050$/socks5 127.0.0.1 9050/' /etc/proxychains4.conf
 
 
 # Clone config repo
@@ -93,20 +91,31 @@ RUN git clone https://github.com/MrMatch246/convenience.git /root/convenience
 RUN cp /root/convenience/zsh_setup/aliases/docker_aliases.zsh /root/.oh-my-zsh/custom/docker_aliases.zsh
 RUN echo "source /root/convenience/zsh_setup/zsh_config/docker_zshrc" >> /root/.zshrc
 
-#Install Python3.12
-ENV PYENV_ROOT="/root/.pyenv"
 
+RUN curl https://pyenv.run | /bin/sh
+
+ENV PYENV_ROOT="/root/.pyenv"
 ENV PATH="$PYENV_ROOT/bin:$PYENV_ROOT/shims:$PATH"
 
+# Initialize pyenv
+RUN echo 'eval "$(pyenv init -)"' >> /root/.zshrc && \
+    echo 'eval "$(pyenv virtualenv-init -)"' >> /root/.zshrc
+
+RUN which pyenv && pyenv --version
+
+
+#Install Python3.12
 RUN pyenv install 3.12.9 && pyenv global 3.12.9
 
 RUN pipx install nettacker --python python3
 
 RUN rm /root/.pyenv/version && \
-    rm -rf /root/.cache \
+    rm -rf /root/.cache
 
 ENV PATH="/root/.local/bin:$PATH"
 
+RUN apt -y autoremove
+RUN apt clean
 
 WORKDIR /
 
