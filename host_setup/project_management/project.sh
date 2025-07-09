@@ -46,10 +46,14 @@ usage() {
 
 create_project() {
   local name="$1"
+  if [ -z "$name" ]; then
+    echo -e  "$WARN Please specify a project name."
+    exit 1
+  fi
   local container="${name}_$(date +%d-%m-%Y)"
   local folder="$RUNNING_ENGAGEMENTS_DIR/$container"
 
-  mkdir -p "$folder"/{Admin,Deliverables,ProjectFiles,Evidence/{Findings,Scans/{Vuln,Service,Web,ADEnum},Notes,OSINT,Logs,Misc},Retest}
+  mkdir -p "$folder"/{Scope,Admin,Deliverables,ProjectFiles,Evidence/{Findings,Scans/{Vuln,Service,Web,ADEnum},Notes,OSINT,Logs,Misc},Retest}
   xhostUp
   docker run -dit \
       --net=host \
