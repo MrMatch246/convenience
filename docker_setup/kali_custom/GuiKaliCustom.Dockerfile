@@ -69,8 +69,7 @@ RUN pipx ensurepath && \
 
 
 
-# Fix for Metasploit Framework
-RUN apt -y purge llvm-19
+
 
 # Install Argus
 WORKDIR /root/
@@ -113,6 +112,9 @@ RUN rm /root/.pyenv/version && \
     rm -rf /root/.cache
 
 ENV PATH="/root/.local/bin:$PATH"
+
+# Fix for Metasploit Framework
+RUN apt -y purge llvm-19 llvm-18
 
 RUN apt -y autoremove
 RUN apt clean
