@@ -60,7 +60,11 @@ guikali() {
 
 fnano() {
     local file
-    file=$(fzf --preview "batcat --paging=never --color=always --style=plain {}") || return
+    if [ -f /etc/arch-release ]; then
+        file=$(fzf --preview "bat --paging=never --color=always --style=plain {}") || return
+    else
+        file=$(fzf --preview "batcat --paging=never --color=always --style=plain {}") || return
+    fi
     nano "$file"
 }
 
