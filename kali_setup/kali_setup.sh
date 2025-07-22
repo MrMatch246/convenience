@@ -36,14 +36,19 @@ apt clean
 chown -R $USER_NAME:$USER_NAME "$USER_HOME"
 
 # === Install Oh My Zsh for user ===
-sudo -u $USER_NAME sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+if [ ! -d "$OH_MY_ZSH_DIR" ]; then
+  sudo -u $USER_NAME sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+fi
 
 # === Set ZSH theme and plugins ===
-sudo -u $USER_NAME git clone https://github.com/zsh-users/zsh-autosuggestions.git $OH_MY_ZSH_DIR/custom/plugins/zsh-autosuggestions
-sudo -u $USER_NAME git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $OH_MY_ZSH_DIR/custom/plugins/zsh-syntax-highlighting
-sed -i 's/ZSH_THEME="robbyrussell"/ZSH_THEME="agnoster"/g' "$ZSHRC"
-sed -i 's/plugins=(git)/plugins=(git zsh-autosuggestions zsh-syntax-highlighting)/g' "$ZSHRC"
-
+if [ ! -d "$OH_MY_ZSH_DIR/custom/plugins/zsh-autosuggestions" ]; then
+  sudo -u $USER_NAME git clone https://github.com/zsh-users/zsh-autosuggestions.git $OH_MY_ZSH_DIR/custom/plugins/zsh-autosuggestions
+  sed -i 's/ZSH_THEME="robbyrussell"/ZSH_THEME="agnoster"/g' "$ZSHRC"
+fi
+if [ ! -d "$OH_MY_ZSH_DIR/custom/plugins/zsh-syntax-highlighting" ]; then
+  sudo -u $USER_NAME git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $OH_MY_ZSH_DIR/custom/plugins/zsh-syntax-highlighting
+  sed -i 's/plugins=(git)/plugins=(git zsh-autosuggestions zsh-syntax-highlighting)/g' "$ZSHRC"
+fi
 
 # === Run Burp Suite Installer (if exists) ===
 if [ -f "$TMP_DIR/burpsuite_pro_linux.sh" ]; then
