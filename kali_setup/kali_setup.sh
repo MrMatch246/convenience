@@ -55,7 +55,7 @@ fi
 # === Run ZAP Installer (if exists) ===
 if [ -f "$TMP_DIR/ZAP_unix.sh" ]; then
   chmod +x "$TMP_DIR/ZAP_unix.sh"
-  sudo -u $USER_NAME "$TMP_DIR/ZAP_unix.sh" -q
+  sudo "$TMP_DIR/ZAP_unix.sh" -q
   rm -f "$TMP_DIR/ZAP_unix.sh"
 fi
 
