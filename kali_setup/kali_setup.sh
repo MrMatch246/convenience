@@ -97,6 +97,15 @@ deactivate
 "
 fi
 
+
+# === Install Legion ===
+cd "$REPO_DIR/.."
+if [ ! -d "$REPO_DIR/../legion" ]; then
+  sudo -u $USER_NAME git clone https://github.com/MrMatch246/legion.git
+  cd legion
+  chmod +x startLegion.sh
+fi
+
 # === Proxychains config update ===
 #sed -i 's/^socks4[ \t]*127\.0\.0\.1[ \t]*9050$/socks5 127.0.0.1 9050/' /etc/proxychains4.conf
 

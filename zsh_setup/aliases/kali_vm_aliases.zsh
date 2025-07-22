@@ -13,3 +13,4 @@ alias burp="nohup /opt/BurpSuitePro/BurpSuitePro --user-config-file=~/tmp/defaul
 alias zap="nohup zap.sh > /dev/null 2>&1 & disown"
 alias arse='arsenal'
 alias argu='source ~/REPOS/argus/env/bin/activate && python3 ~/REPOS/argus/argus.py'
+alias legion='sudo ~/REPOS/legion/startLegion.sh'
