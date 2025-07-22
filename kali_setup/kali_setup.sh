@@ -4,6 +4,7 @@ set -euo pipefail
 
 USER_NAME="user"
 USER_HOME="/home/$USER_NAME"
+REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 TMP_DIR="$USER_HOME/tmp"
 OH_MY_ZSH_DIR="$USER_HOME/.oh-my-zsh"
 ZSHRC="$USER_HOME/.zshrc"
@@ -88,8 +89,8 @@ deactivate
 #sed -i 's/^socks4[ \t]*127\.0\.0\.1[ \t]*9050$/socks5 127.0.0.1 9050/' /etc/proxychains4.conf
 
 # === Clone convenience repo and apply configs ===
-cp "$USER_HOME/convenience/zsh_setup/aliases/kali_vm_aliases.zsh" "$OH_MY_ZSH_DIR/custom/kali_vm_aliases.zsh"
-echo "source $USER_HOME/convenience/zsh_setup/zsh_config/docker_zshrc" >> "$ZSHRC"
+cp "$REPO_DIR/zsh_setup/aliases/kali_vm_aliases.zsh" "$OH_MY_ZSH_DIR/custom/kali_vm_aliases.zsh"
+echo "source $REPO_DIR/zsh_setup/zsh_config/docker_zshrc" >> "$ZSHRC"
 
 # === Install pyenv ===
 sudo -u $USER_NAME bash -c "curl https://pyenv.run | bash"
