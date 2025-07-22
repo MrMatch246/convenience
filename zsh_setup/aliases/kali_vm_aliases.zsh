@@ -7,4 +7,9 @@ fnano() {
     fi
     nano "$file"
 }
-alias upali="cp ~/REPOS/convenience/zsh_setup/aliases/kali_vm_aliases.zsh ~/.oh-my-zsh/custom/kali_vm_aliases.zsh;cp ~/REPOS/convenience/zsh_setup/aliases/kali_vm_project_aliases.zsh ~/.oh-my-zsh/custom/kali_vm_project_aliases.zsh;source ~/.zshrc"
+alias upali="git -C ~/REPOS/convenience pull;cp ~/REPOS/convenience/zsh_setup/aliases/kali_vm_aliases.zsh ~/.oh-my-zsh/custom/kali_vm_aliases.zsh;cp ~/REPOS/convenience/zsh_setup/aliases/kali_vm_project_aliases.zsh ~/.oh-my-zsh/custom/kali_vm_project_aliases.zsh;source ~/.zshrc"
+alias msf="service postgresql start;msfdb run"
+alias burp="nohup /opt/BurpSuitePro/BurpSuitePro --user-config-file=~/tmp/default_burp_user_settings.json > /dev/null 2>&1 & disown"
+alias zap="nohup zap.sh > /dev/null 2>&1 & disown"
+alias arse='arsenal'
+alias argu='source ~/REPOS/argus/env/bin/activate && python3 /root/argus/argus.py'
