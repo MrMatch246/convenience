@@ -79,8 +79,8 @@ sudo -u $USER_NAME pipx install arsenal-cli
 #sudo -u $USER_NAME pipx install tldr
 
 # === Install Argus ===
+cd $REPO_DIR
 sudo -u $USER_NAME bash -c "
-cd ~ &&
 git clone https://github.com/jasonxtn/argus.git &&
 cd argus &&
 python3 -m venv env &&
