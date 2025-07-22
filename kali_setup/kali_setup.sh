@@ -79,7 +79,7 @@ sudo -u $USER_NAME pipx install arsenal-cli
 #sudo -u $USER_NAME pipx install tldr
 
 # === Install Argus ===
-cd $REPO_DIR
+cd "$REPO_DIR/.."
 sudo -u $USER_NAME bash -c "
 git clone https://github.com/jasonxtn/argus.git &&
 cd argus &&
