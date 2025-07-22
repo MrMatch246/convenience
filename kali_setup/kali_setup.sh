@@ -79,6 +79,7 @@ sudo -u $USER_NAME pipx install arsenal-cli
 #sudo -u $USER_NAME pipx install tldr
 
 # === Install Argus ===
+if [ ! -d "$REPO_DIR/../argus" ]; then
 cd "$REPO_DIR/.."
 sudo -u $USER_NAME bash -c "
 git clone https://github.com/jasonxtn/argus.git &&
@@ -89,6 +90,7 @@ pip install --upgrade pip &&
 pip install -r requirements.txt &&
 deactivate
 "
+fi
 
 # === Proxychains config update ===
 #sed -i 's/^socks4[ \t]*127\.0\.0\.1[ \t]*9050$/socks5 127.0.0.1 9050/' /etc/proxychains4.conf
