@@ -15,8 +15,8 @@ WSTG_CHECKLIST_URL="https://github.com/OWASP/wstg/raw/refs/heads/master/checklis
 
 # === System packages ===
 export DEBIAN_FRONTEND=noninteractive
-apt update
-apt install -y \
+sudo apt update
+sudo apt install -y \
   kali-linux-default \
   zsh \
   fonts-powerline \
@@ -30,7 +30,7 @@ apt install -y \
   ca-certificates \
   python3-venv \
   pipx
-apt clean
+sudo apt clean
 
 # === Set ownership for user if needed ===
 chown -R $USER_NAME:$USER_NAME "$USER_HOME"
