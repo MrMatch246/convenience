@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-USER_NAME="user"
+USER_NAME="$(whoami)"
 USER_HOME="/home/$USER_NAME"
 REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 TMP_DIR="$USER_HOME/tmp"
@@ -60,6 +60,7 @@ if [ -f "$TMP_DIR/burpsuite_pro_linux.sh" ]; then
   chmod +x "$TMP_DIR/burpsuite_pro_linux.sh"
   sudo -u $USER_NAME "$TMP_DIR/burpsuite_pro_linux.sh" -q
   rm -f "$TMP_DIR/burpsuite_pro_linux.sh"
+  echo "@@@@@ Burp Suite Pro installed successfully @@@@@"
 fi
 
 # === Run ZAP Installer (if exists) ===
@@ -67,6 +68,7 @@ if [ -f "$TMP_DIR/ZAP_unix.sh" ]; then
   chmod +x "$TMP_DIR/ZAP_unix.sh"
   sudo "$TMP_DIR/ZAP_unix.sh" -q
   rm -f "$TMP_DIR/ZAP_unix.sh"
+  echo "@@@@@ ZAP installed successfully @@@@@"
 fi
 
 # === Jython ===
@@ -95,6 +97,7 @@ pip install --upgrade pip &&
 pip install -r requirements.txt &&
 deactivate
 "
+echo "@@@@@ Argus installed successfully @@@@@"
 fi
 
 
@@ -104,6 +107,7 @@ if [ ! -d "$REPO_DIR/../legion" ]; then
   sudo -u $USER_NAME git clone https://github.com/MrMatch246/legion.git
   cd legion
   chmod +x startLegion.sh
+  echo "@@@@@ Legion installed successfully @@@@@"
 fi
 
 # === Proxychains config update ===

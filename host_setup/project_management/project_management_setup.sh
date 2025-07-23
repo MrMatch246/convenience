@@ -1,7 +1,8 @@
 #!/bin/bash
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-LINE='export PATH="$PATH:/home/user/.local/bin"'
+echo "Setting up project management tools... CHECK FOR CORRECT USER"
+LINE='export PATH="$PATH:/home/$USER/.local/bin"'
 ZSHRC="$HOME/.zshrc"
 mkdir -p /home/$(whoami)/.local/bin
 ln -sf "$SCRIPT_DIR/project.sh" /home/$(whoami)/.local/bin/project
