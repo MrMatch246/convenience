@@ -1,7 +1,7 @@
 #!/bin/bash
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-echo "Setting up project management tools... CHECK FOR CORRECT USER"
+echo "Setting up project management tools..."
 LINE='export PATH="$PATH:/home/$USER/.local/bin"'
 ZSHRC="$HOME/.zshrc"
 mkdir -p /home/$(whoami)/.local/bin
