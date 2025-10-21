@@ -7,7 +7,7 @@ _project() {
     '1:command:(create switch archive remove export enter exit addfeat enterfeat)' \
     '2:project name or feature:->dynamic' && return 0
 
-  case $words[2] in
+  case ${words[2]} in
     enter|switch|archive|remove|export)
       local containers
       containers=(${(f)"$(
